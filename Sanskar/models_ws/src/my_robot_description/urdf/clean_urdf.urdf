@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<robot name="minesweeper">
+  <link name = "link"/>
+
+<!-- CASING OF THE CHASSIS-->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.15 0.01 0.05"/>
+      </geometry>
+      <origin xyz = "0 0 0.025"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.15 0.04 0.01"/>
+      </geometry>
+      <origin xyz = "0 0.015 0.055"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.15 0.04 0.01"/>
+      </geometry>
+      <origin xyz = "0 0.015 -0.005"/>
+    </visual>
+  </link>
+
+  <joint name = "base_joint" type="fixed">
+    <parent link = "link"/>
+    <child link="base_link"/>
+    <origin xyz = "0 0 0.1"/>
+  </joint>
+
+  <link name = "component_plate_link">
+    <visual>
+      <geometry>
+        <box size = "0.15 0.15 0.005"/>
+      </geometry>
+      <origin xyz = "0 0 0"/>
+      <material name="translucent_glass">
+        <color rgba="0.8 0.8 0.8 0.5"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.01"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy = "${pi/2} 0 0"/>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+  </link>
+
+  <joint name = "component_plate_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link = "component_plate_link"/>
+    <origin xyz = "0 0.08 0.0025"/>
+  </joint>
+
+  <link name="mirror_base_link">
+    <visual>
+      <geometry>
+        <box size="0.15 0.01 0.05"/>
+      </geometry>
+      <origin xyz = "0 0 0.025"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.15 0.04 0.01"/>
+      </geometry>
+      <origin xyz = "0 -0.015 0.055"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.15 0.04 0.01"/>
+      </geometry>
+      <origin xyz = "0 -0.015 -0.005"/>
+    </visual>
+  </link>
+
+  <joint name = "mirror_base_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link = "mirror_base_link"/>
+    <origin xyz = "0 0.16 0"/>
+  </joint>
+
+</robot>
