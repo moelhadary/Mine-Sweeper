@@ -20,7 +20,7 @@ UPDATE_GOAL_SRV = "update_goal"
 # Lawnmower pattern parameters
 MOWING_STRIPE_LENGTH = 5.0  # meters
 MOWING_STRIPE_WIDTH = 1.0   # meters
-intermediate_goal_count = 0  # Place this near your global variable declarations
+intermediate_goal_count = 0  
 # Navigation thresholds
 OBSTACLE_THRESHOLD = 0.5    # meters
 GOAL_THRESHOLD = 0.2        # meters
