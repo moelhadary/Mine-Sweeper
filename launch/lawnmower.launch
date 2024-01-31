@@ -1,0 +1,17 @@
+<launch>
+    <arg name="x_goal" default="0.0"/>
+    <arg name="y_goal" default="0.0"/>
+    <!-- Launch the robot setup -->
+    <include file="$(find turtlebot3_gazebo)/launch/world1.launch"/>
+
+    <!-- Launch the lawnmower navigation node -->
+    <node name="follow_wall_server" pkg="bug0" type="follow_wall.py" output="screen"/>
+    <node name="go_to_goal_server" pkg="bug0" type="go_to_goal.py" output="screen"/>
+    <node pkg="bug0" type="lawnmower.py" name="lawnmower" output="screen">
+        <!-- Add any required ROS parameters here -->
+        <param name="x_goal" value="$(arg x_goal)" type="string"/>
+        <param name="y_goal" value="$(arg y_goal)" type="string"/>
+    </node>
+</launch>
+
+

@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # 1. check if you have lost the wall
 # 2. Find the wall and turn left
 # 3. Follow the wall and if right region is free, turn right
