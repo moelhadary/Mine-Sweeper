@@ -1,0 +1,7 @@
+<launch>
+  <!-- Load the URDF model into the parameter server -->
+  <param name="robot_description" textfile="$(find my_robot_description)/urdf/my_robot.urdf"/>
+
+  <!-- Launch RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_robot_description)/rviz/display_config.rviz" />
+</launch>

@@ -1,0 +1,2 @@
+my_robot_description
+-DCATKIN_DEVEL_PREFIX=/home/sanskar_/models_ws/devel -DCMAKE_INSTALL_PREFIX=/home/sanskar_/models_ws/install -G Unix Makefiles
