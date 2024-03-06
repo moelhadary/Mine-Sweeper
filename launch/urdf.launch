@@ -1,0 +1,11 @@
+<launch>
+    
+    <!-- Launch the robot setup -->
+    <include file="$(find turtlebot3_gazebo)/launch/world1_urdf.launch"/>
+    <!-- Add your forward.py script node here -->
+    <node name="forward_motion" pkg="bug0" type="forward_urdf.py" output="screen"/>
+    
+</launch>
+
+
+

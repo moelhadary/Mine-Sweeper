@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="minesweeper_left">
+  
+  <link name="left_base_link"/>
+
+  <xacro:property name="circular_plate_length" value="0.005"/>
+  <xacro:property name="circular_plate_radius" value="0.0375"/>
+
+  <link name = "circular_plate_link">
+    <visual>
+        <geometry>
+            <cylinder length="${circular_plate_length}" radius="${circular_plate_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="${pi/2} 0 0"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length="${circular_plate_length}" radius="${circular_plate_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="${pi/2} 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.01"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.01*(3*circular_plate_radius**2 + circular_plate_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.01*(3*circular_plate_radius**2 + circular_plate_length**2)}" iyz="0" izz="${1/2*0.01*circular_plate_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+
+    </inertial>
+  </link>
+
+  <joint name="circular_plate_joint" type="fixed">
+    <parent link="left_base_link"/>
+    <child link="circular_plate_link"/>
+  </joint>
+
+  <xacro:property name="bracket_length" value="0.045"/>
+  <xacro:property name="bracket_radius" value="0.02"/>
+
+  <link name="bracket_link">
+    <visual>
+        <geometry>
+            <cylinder length = "${bracket_length}" radius="${bracket_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length = "${bracket_length}" radius="${bracket_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.03"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.01*(3*bracket_radius**2 + bracket_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.01*(3*bracket_radius**2 + bracket_length**2)}" iyz="0" izz="${1/2*0.01*bracket_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name="bracket_joint" type="fixed">
+    <parent link ="left_base_link"/>
+    <child link ="bracket_link"/>
+    <origin xyz="0 ${circular_plate_length/2 + bracket_length/2} 0" rpy="${pi/2} 0 0"/>
+  </joint>
+
+  <xacro:property name="rot_bracket_length" value="0.045"/>
+  <xacro:property name="rot_bracket_radius" value="0.03"/>
+  <xacro:property name="leg_x" value="0.05"/>
+  <xacro:property name="leg_y" value="0.035"/>
+  <xacro:property name="leg_z" value="0.035"/>
+
+
+  <link name = "rot_bracket_link">
+    <visual>
+        <geometry>
+            <cylinder length = "${rot_bracket_length}" radius="${rot_bracket_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder length = "${rot_bracket_length}" radius="${rot_bracket_radius}"/>
+        </geometry>
+        <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.07"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.07*(3*rot_bracket_radius**2 + rot_bracket_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.07*(3*rot_bracket_radius**2 + rot_bracket_length**2)}" iyz="0" izz="${1/2*0.07*rot_bracket_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+
+    <visual>
+      <geometry>
+        <box size = "${leg_x} ${leg_y} ${leg_z}"/>
+      </geometry>
+      <origin xyz = "${leg_x/2} ${-leg_y/2} 0" rpy="0 0 ${-pi/6}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size = "${leg_x} ${leg_y} ${leg_z}"/>
+      </geometry>
+      <origin xyz = "${leg_x/2} ${-leg_y/2} 0" rpy="0 0 ${-pi/6}"/>
+    </collision>
+
+    <visual>
+      <geometry>
+        <box size = "${leg_x} ${leg_y} ${leg_z}"/>
+      </geometry>
+      <origin xyz = "${-leg_x/2} ${-leg_y/2} 0" rpy="0 0 ${pi/6}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size = "${leg_x} ${leg_y} ${leg_z}"/>
+      </geometry>
+      <origin xyz = "${-leg_x/2} ${-leg_y/2} 0" rpy="0 0 ${pi/6}"/>
+    </collision>
+  </link>
+
+  <joint name="rot_bracket_joint" type="fixed">
+    <parent link ="bracket_link"/>
+    <child link ="rot_bracket_link"/>
+    <origin xyz= "0 0 ${-rot_bracket_length/2 - bracket_length/2}" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:property name="metal_leg_x" value="0.25"/>
+  <xacro:property name="metal_leg_y" value="0.025"/>
+  <xacro:property name="metal_leg_z" value="0.025"/>
+
+  <link name="metal_leg_link">
+    <visual>
+      <geometry>
+        <box size = "${metal_leg_x} ${metal_leg_y} ${metal_leg_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size = "${metal_leg_x} ${metal_leg_y} ${metal_leg_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="1.4"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*1.4*(metal_leg_y**2+metal_leg_z**2)}" ixy="0" ixz="0" iyy="${1/12*1.4*(metal_leg_x**2+metal_leg_z**2)}" iyz="0" izz="${1/12*1.4*(metal_leg_y**2+metal_leg_x**2)}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name = "metal_leg_joint" type="fixed">
+    <parent link = "rot_bracket_link"/>
+    <child link = "metal_leg_link"/>
+    <origin xyz = "${(metal_leg_x/2 + rot_bracket_radius + 0.025) *0.866 } ${-1*(metal_leg_x/2 + rot_bracket_radius + 0.025) *0.5} 0" rpy = "0 0 ${-pi/6}"/>
+  </joint>
+
+  <xacro:property name="metal_leg_mirror_x" value="0.1"/>
+
+  <link name="metal_leg_mirror_link">
+    <visual>
+      <geometry>
+        <box size = "${metal_leg_mirror_x} ${metal_leg_y} ${metal_leg_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size = "${metal_leg_mirror_x} ${metal_leg_y} ${metal_leg_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.1"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.1*(metal_leg_y**2+metal_leg_z**2)}" ixy="0" ixz="0" iyy="${1/12*0.1*(metal_leg_mirror_x**2+metal_leg_z**2)}" iyz="0" izz="${1/12*0.1*(metal_leg_y**2+metal_leg_mirror_x**2)}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name = "metal_leg_mirror_joint" type="fixed">
+    <parent link = "rot_bracket_link"/>
+    <child link = "metal_leg_mirror_link"/>
+    <origin xyz = "${-1*(metal_leg_mirror_x/2  + rot_bracket_radius + 0.025) *0.866 } ${-1*(metal_leg_mirror_x/2 + rot_bracket_radius+ 0.025) *0.5} 0" rpy = "0 0 ${pi/6}"/>
+  </joint>
+
+  <xacro:property name="bjw_o_radius" value="0.01"/>
+  <xacro:property name="bjw_o_length" value="0.03"/>
+
+
+  <link name="bjw_link">
+    <visual>
+      <geometry>
+        <cylinder radius="${bjw_o_radius}" length="${bjw_o_length}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="${bjw_o_radius}" length="${bjw_o_length}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.03"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.03*(3*bjw_o_radius**2 + bjw_o_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.03*(3*bjw_o_radius**2 + bjw_o_length**2)}" iyz="0" izz="${1/2*0.03*bjw_o_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name="bjw_joint" type="revolute">
+    <parent link="metal_leg_mirror_link"/>
+    <child link="bjw_link"/>
+    <origin xyz ="${-1*(metal_leg_mirror_x/2-bjw_o_radius)} 0 0" rpy="0 0 0"/>
+    <limit lower="-2" upper="0" effort="10" velocity="3"/>
+    <axis xyz = "0 0 1"/>
+  </joint>
+
+  <link name = "short_leg_link">
+    <visual>
+      <geometry>
+        <box size="${metal_leg_x - metal_leg_mirror_x + bjw_o_radius} ${metal_leg_y} ${metal_leg_z}" rpy="0 0 0"/>
+      </geometry>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${metal_leg_x - metal_leg_mirror_x + bjw_o_radius} ${metal_leg_y} ${metal_leg_z}" rpy="0 0 0"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.05"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.05*(metal_leg_y**2 + metal_leg_z**2)}" ixy="0" ixz="0" iyy="${1/12*0.05*((metal_leg_x - metal_leg_mirror_x + bjw_o_radius)**2 + metal_leg_z**2)}" iyz="0" izz="${1/12*0.05*((metal_leg_x - metal_leg_mirror_x + bjw_o_radius)**2 + metal_leg_y**2)}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name="short_leg_joint" type="fixed">
+    <parent link="bjw_link"/>
+    <child link="short_leg_link"/>
+    <origin xyz="${-1*(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)/2} 0 0" rpy="0 0 0"/>
+  </joint>
+
+    <link name = "short_leg_two_link">
+    <visual>
+      <geometry>
+        <box size="${metal_leg_x - metal_leg_mirror_x + bjw_o_radius} ${metal_leg_y} ${metal_leg_z}" rpy="0 0 0"/>
+      </geometry>
+      <origin xyz="${(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)/2} 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${metal_leg_x - metal_leg_mirror_x + bjw_o_radius} ${metal_leg_y} ${metal_leg_z}" rpy="0 0 0"/>
+      </geometry>
+      <origin xyz="${(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)/2} 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="${(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)/2} 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.05"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.05*(metal_leg_z**2 + metal_leg_y**2)}" ixy="0" ixz="0" iyy="${1/12*0.05*(metal_leg_z**2 + (metal_leg_x - metal_leg_mirror_x + bjw_o_radius)**2)}" iyz="0" izz="${1/12*0.05*(metal_leg_y**2 + (metal_leg_x - metal_leg_mirror_x + bjw_o_radius)**2)}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name="short_leg_two_joint" type="fixed">
+    <parent link="bjw_link"/>
+    <child link="short_leg_two_link"/>
+    <origin xyz="0 0 0" rpy="0 0 ${-pi/3}"/>
+  </joint>
+
+  <xacro:property name="wheel_length" value="0.065"/>
+  <xacro:property name="wheel_radius" value="0.075"/>
+
+  <link name="wheel_one">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.4 0.7 0.8 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.05"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" iyz="0" izz="${1/2*0.5*wheel_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>
+
+  <joint name="wheel_one_joint" type="continuous">
+    <parent link="metal_leg_link"/>
+    <child link="wheel_one"/>
+    <origin xyz="${metal_leg_x/2} 0 ${-1*(metal_leg_z/2+wheel_length/2)}" rpy="0 0 0"/>
+    <axis xyz = "0 0 1"/>
+  </joint>
+    
+  <link name="wheel_two">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.4 0.7 0.8 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.05"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" iyz="0" izz="${1/2*0.5*wheel_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>    
+
+  <joint name="wheel_two_joint" type="continuous">
+    <parent link="short_leg_two_link"/>
+    <child link="wheel_two"/>
+    <origin xyz="${(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)} 0 ${-1*(metal_leg_z/2+wheel_length/2)}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>  
+
+  <link name="wheel_three">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="steel">
+        <color rgba="0.4 0.7 0.8 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.05"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.5*(3*wheel_radius**2 + wheel_length**2)}" iyz="0" izz="${1/2*0.5*wheel_radius**2}"/> <!-- Inertia tensor components in kg*m^2 -->
+    </inertial>
+  </link>    
+
+  <joint name="wheel_three_joint" type="continuous">
+    <parent link="short_leg_link"/>
+    <child link="wheel_three"/>
+    <origin xyz="${-1*(metal_leg_x - metal_leg_mirror_x + bjw_o_radius)/2} 0 ${-1*(metal_leg_z/2+wheel_length/2)}" rpy="0 0 0"/>
+    <axis xyz = "0 0 1"/>
+  </joint>  
+
+</robot>

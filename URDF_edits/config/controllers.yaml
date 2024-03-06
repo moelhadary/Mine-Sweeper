@@ -1,0 +1,30 @@
+# Define the joint state controller
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# Wheel velocity controllers
+wheel1_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: r_wheel_one_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}
+wheel2_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: r_wheel_two_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}
+wheel3_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: r_wheel_three_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}
+wheel4_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: wheel_one_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}
+wheel5_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: wheel_two_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}
+wheel6_velocity_controller:
+  type: effort_controllers/JointVelocityController
+  joint: wheel_three_joint
+  pid: {p: 1.0, i: 0.1, d: 0.01}

@@ -1,0 +1,367 @@
+<?xml version="1.0"?>
+
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="minesweeper">
+  <link name = "link"/>
+
+    <!--Central platform-->
+
+  <xacro:property name="c_middle_x" value="0.328"/>
+  <xacro:property name="c_middle_y" value="0.0127"/>
+  <xacro:property name="c_middle_z" value="0.105"/>
+
+  <xacro:property name="c_top_x" value="0.328"/>
+  <xacro:property name="c_top_y" value="0.0457"/>
+  <xacro:property name="c_top_z" value="0.0127"/>
+
+   <link name="base_link">
+
+    <visual>
+      <geometry>
+        <box size="${c_middle_x} ${c_middle_y} ${c_middle_z}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}"/> 
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_middle_x} ${c_middle_y} ${c_middle_z}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}"/> 
+    </collision>
+
+    <visual>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${c_top_y/2 - c_middle_y/2} ${c_middle_z + c_top_z/2}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${c_top_y/2 - c_middle_y/2} ${c_middle_z + c_top_z/2}"/>
+    </collision>
+
+    <visual>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${c_top_y/2 - c_middle_y/2} ${- c_top_z/2}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${c_top_y/2 - c_middle_y/2} ${- c_top_z/2}"/>    
+    </collision>
+
+    <inertial>
+      <origin xyz="${c_middle_x} ${c_middle_y} ${c_middle_z}" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.67"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.67*(c_middle_y**2 + c_middle_z**2)}" ixy="0" ixz="0" iyy="${1/12*0.67*(c_middle_x**2 + c_middle_z**2)}" iyz="0" izz="${1/12*0.67*(c_middle_y**2 + c_middle_x**2)}"/> <!-- Inertia tensor components in kg*m**2 -->
+    </inertial>
+  </link>
+
+  <joint name = "base_joint" type="fixed">
+    <parent link = "link"/>
+    <child link="base_link"/>
+    <origin xyz = "0 0 0.175"/> <!-- 0.1 just for visualization-->
+  </joint>
+
+<!-- Component Plate-->
+
+  <xacro:property name="component_plate_x" value="0.3279"/>
+  <xacro:property name="component_plate_y" value="0.254"/>
+  <xacro:property name="component_plate_z" value="0.005"/>
+  
+  <xacro:property name="component_rod_length" value="0.254"/>
+  <xacro:property name="component_rod_radius" value="0.01"/>
+
+  <link name = "component_plate_link">
+
+    <visual>
+      <geometry>
+        <box size = "${component_plate_x} ${component_plate_y} ${component_plate_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0"/>
+      <material name="translucent_glass">
+        <color rgba="0.8 0.8 0.8 0.5"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size = "${component_plate_x} ${component_plate_y} ${component_plate_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="$0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.55"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.55*(component_plate_y**2 + component_plate_z**2)}" ixy="0" ixz="0" iyy="${1/12*0.55*(component_plate_x**2 + component_plate_z**2)}" iyz="0" izz="${1/12*0.55*(component_plate_y**2 + component_plate_x**2)}"/> <!-- Inertia tensor components in kg*m**2 -->
+    </inertial>
+
+    <visual>
+      <geometry>
+        <cylinder length="${component_rod_length}" radius="${component_rod_radius}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}" rpy = "${pi/2} 0 0"/>
+      <material name="steel">
+        <color rgba="0.5 0.5 0.5 1"/> <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${component_rod_length}" radius="${component_rod_radius}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}" rpy = "${pi/2} 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="$0 0 ${c_middle_z/2}" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.8"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.8*(3*component_rod_radius**2 + component_rod_length**2)}" ixy="0" ixz="0" iyy="${1/12*0.8*(3*component_rod_radius**2 + component_rod_length**2)}" iyz="0" izz="${1/2*0.8*component_rod_radius**2}"/> <!-- Inertia tensor components in kg*m**2 -->
+    </inertial>
+
+  </link>
+
+  <joint name = "component_plate_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link = "component_plate_link"/>
+    <origin xyz = "0 ${component_plate_y/2 + c_middle_y/2} ${component_plate_z/2}"/>
+  </joint>
+
+<!-- ELEC BOX -->
+
+  <xacro:property name="elec_box_x" value="0.08"/>
+  <xacro:property name="elec_box_y" value="0.08"/>
+  <xacro:property name="elec_box_z" value="0.04"/>
+
+  <link name="elec_box_link">
+    <visual>
+      <geometry>
+        <box size="${elec_box_x} ${elec_box_y} ${elec_box_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0"/> 
+                <material name="steel">
+        <color rgba="0 0 0 1"/>
+        <!-- Adjust the RGBA values for your desired color and opacity -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${elec_box_x} ${elec_box_y} ${elec_box_z}"/>
+      </geometry>
+      <origin xyz = "0 0 0"/> 
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="1.0"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*1*(elec_box_y**2+elec_box_z**2)}" ixy="0" ixz="0" iyy="${1/12*1*(elec_box_x**2+elec_box_z**2)}" iyz="0" izz="${1/12*1*(elec_box_y**2+elec_box_x**2)}"/> <!-- Inertia tensor components in kg*m**2 -->
+    </inertial>
+  </link>
+
+  <joint name = "elec_box_joint" type="fixed">
+    <parent link = "component_plate_link"/>
+    <child link = "elec_box_link"/>
+    <origin xyz = "0 0 ${component_plate_z/2 + elec_box_z/2}"/>
+  </joint>  
+
+<!-- MIRROR OF THE ABOVE -->
+
+  <link name="mirror_base_link">
+    <visual>
+      <geometry>
+        <box size="${c_middle_x} ${c_middle_y} ${c_middle_z}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}"/> 
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_middle_x} ${c_middle_y} ${c_middle_z}"/>
+      </geometry>
+      <origin xyz = "0 0 ${c_middle_z/2}"/> 
+    </collision>
+
+    <visual>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${-c_top_y/2 + c_middle_y/2} ${c_middle_z + c_top_z/2}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${-c_top_y/2 + c_middle_y/2} ${c_middle_z + c_top_z/2}"/>   
+    </collision>
+
+    <visual>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${-c_top_y/2 + c_middle_y/2} ${- c_top_z/2}"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${c_top_x} ${c_top_y} ${c_top_z}"/>
+      </geometry>
+      <origin xyz = "0 ${-c_top_y/2 + c_middle_y/2} ${- c_top_z/2}"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 ${c_middle_z/2}" rpy="0 0 0"/> <!-- Position and orientation of the inertia frame relative to the link frame -->
+      <mass value="0.67"/> <!-- Mass of the link in kilograms -->
+      <inertia ixx="${1/12*0.67*(c_middle_y**2+c_middle_z**2)}" ixy="0" ixz="0" iyy="${1/12*0.67*(c_middle_x**2+c_middle_z**2)}" iyz="0" izz="${1/12*0.67*(c_middle_y**2+c_middle_x**2)}"/> <!-- Inertia tensor components in kg*m**2 -->
+    </inertial>
+  </link>
+
+  <joint name = "mirror_base_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link = "mirror_base_link"/>
+    <origin xyz = "0 ${component_plate_y + c_middle_y} 0"/>
+  </joint>
+
+<!-- Left Side Structure -->
+
+  <xacro:include filename="dc_left_xacro.xacro"/>
+
+  <joint name="left_xacro_joint" type="fixed">
+    <parent link="mirror_base_link"/>
+    <child link="left_base_link"/> <!-- Assuming there's a link in left_xacro.xacro named base_link_left_xacro -->
+    <origin xyz="0 ${c_middle_y/2} ${c_middle_z/2}"/> <!-- Adjust the origin as needed -->
+  </joint>
+
+<!-- Right Side Structure -->
+
+  <xacro:include filename="dc_right_xacro.xacro"/>
+
+  <joint name="right_xacro_joint" type="fixed">
+    <parent link="mirror_base_link"/>
+    <child link="right_base_link"/> <!-- Assuming there's a link in left_xacro.xacro named base_link_left_xacro -->
+    <origin xyz="0 ${-3*c_middle_y/2 - component_plate_y} ${c_middle_z/2}"/> <!-- Adjust the origin as needed -->
+  </joint>
+
+
+
+  <!-- Transmissions for wheel velocity controllers -->
+  <transmission name="wheel1_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_wheel_one_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel2_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_wheel_two_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel3_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_wheel_three_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel4_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_one_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel5_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_two_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel6_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_three_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+<!-- DETECTOR -->
+
+
+    <!-- LiDAR Sensor -->
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+  </joint>
+
+
+  <gazebo reference="lidar_link">
+  <sensor type="ray" name="lidar_sensor">
+    <pose>0 0 0 0 0 0</pose>
+    <visualize>true</visualize>
+    <update_rate>30.0</update_rate>
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>720</samples>
+          <resolution>1</resolution>
+          <min_angle>-1.570796</min_angle>
+          <max_angle>1.570796</max_angle>
+        </horizontal>
+      </scan>
+      <range>
+        <min>0</min>
+        <max>0</max>
+        <resolution>0.01</resolution>
+      </range>
+    </ray>
+    <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_laser.so">
+      <topicName>/scan</topicName>
+      <frameName>lidar_link</frameName>
+    </plugin>
+  </sensor>
+</gazebo>
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/</robotNamespace>
+  </plugin>
+</gazebo>
+</robot>
+
+
