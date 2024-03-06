@@ -19,7 +19,7 @@ def move_forward():
     while not rospy.is_shutdown():
         # Set a constant speed for all wheels to move the robot forward
         for pub in pubs:
-            pub.publish(Float64(1.0))
+            pub.publish(Float64(-0.75))
         
         rate.sleep()
 
