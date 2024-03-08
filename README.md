@@ -1,15 +1,14 @@
 # MineSweeper
 The MineSweeper is a capstone engineering project. It is an attempt at helping humanitarian demining organizations build a robot that can automatically detect and map metal detectors, reducing the need for human labour.
 
-Robot Operating Software (ROS) Noetic is used on a Raspberry Pi 4B+ to control the robot. In the branch 'master', the catkin_ws folder is the workspace from the raspberry pi where all the scripts and ros files are present. ROS is used to read input from an ESP32 using I2C protocol, send pwm signals to BLDC wheels, control the navigation, and all moving parts. <br>
+## ROS 
+Robot Operating Software (ROS) Noetic is used on a Raspberry Pi 4B+ to control the robot. On the [Master](https://github.com/moelhadary/Mine-Sweeper/tree/master) branch, all the ongoing progress with ROS can be seen. ROS is used to create nodes for pwm generation to BLDC motors, endstoppers, controlling servo motors and stepper motors, I2C communication between Pi and ESP32 (used to read feedback and metal detector input) amongst others. Custom messages have also been created. <br><br>
+
 ## URDF
 On the 'main' branch is the URDF design of the robot. This design was used to make a gazebo simulation of the navigation.
 <div align="center">
   <img src="/URDF.png" alt="URDF Model"><br>
   <em>Fig: URDF Model of Robot</em><br><br>
 </div> 
-
-## ROS 
-On the [Master](https://github.com/moelhadary/Mine-Sweeper/tree/master) branch, all the ongoing progress with ROS can be seen. ROS is used to create nodes for pwm generation, feedback reading, endstoppers, metal detectors, I2C communication amongst others. Custom messages have also been created. <br><br>
 
 The project is set to be finished in April 11, 2024. 
