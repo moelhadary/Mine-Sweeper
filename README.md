@@ -10,5 +10,6 @@ On the 'main' branch is the URDF design of the robot. This design was used to ma
 </div> 
 
 ## ROS 
+On the [Master](https://github.com/moelhadary/Mine-Sweeper/tree/master) branch
 
 The project is set to be finished in April 11, 2024. 
