@@ -5,7 +5,7 @@ Robot Operating Software (ROS) Noetic is used on a Raspberry Pi 4B+ to control t
 
 On the 'main' branch is the URDF design of the robot. This design was used to make a gazebo simulation of the navigation.
 <div align="center">
-  <img src="/Varroa_Mite_detection.jpg" alt="Output of second model"><br>
+  <img src="/URDF.jpg" alt="URDF Model"><br>
   <em>Fig: URDF Model of Robot</em><br><br>
 </div>
 
