@@ -11,4 +11,4 @@ On the 'main' branch is the URDF design of the robot. This design was used to ma
   <em>Fig: URDF Model of Robot</em><br><br>
 </div> 
 
-The project is set to be finished in April 11, 2024. 
+The project is set to be finished on April 11, 2024. 
