@@ -10,6 +10,6 @@ On the 'main' branch is the URDF design of the robot. This design was used to ma
 </div> 
 
 ## ROS 
-On the [Master](https://github.com/moelhadary/Mine-Sweeper/tree/master) branch
+On the [Master](https://github.com/moelhadary/Mine-Sweeper/tree/master) branch, all the ongoing progress with ROS can be seen. ROS is used to create nodes for pwm generation, feedback reading, endstoppers, metal detectors, I2C communication amongst others. Custom messages have also been created. <br><br>
 
 The project is set to be finished in April 11, 2024. 
